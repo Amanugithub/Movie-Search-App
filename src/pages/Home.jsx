@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+
 import NavBar from '../components/NavBar'
 import Trending from '../components/Trending';
 

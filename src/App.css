@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@200..800&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 @import "tailwindcss";
 @theme {
@@ -7,17 +7,125 @@
     --font-instrument: "Instrument Serif", serif;
     --font-opensans: "Open Sans", sans-serif;
     --font-sans: "Open Sans", sans-serif;
+    --font-manrope: "Manrope", sans-serif;
+    --color-primary: #0d1117;
+    --color-secondary:#ffb800;
+    --color-tertiary:#5d4037;
+    --color-neutral:#f9f7f2;
+
+    --color-primary-dark: #ffb800;
+    --color-primary-dark-50: #FFEED8;
+    --color-primary-dark-100: #FFDEA8;
+    --color-primary-dark-200: #FFBA20;
+    --color-primary-dark-300: #DEA000;
+    --color-primary-dark-400: #BC8700;
+    --color-primary-dark-500: #9C6F00;
+    --color-primary-dark-600: #7C5800;
+    --color-primary-dark-700: #5E4200;
+    --color-primary-dark-800: #412D00;
+    --color-primary-dark-900:#271900;
+
+    --color-secondary-dark: #6366f1;
+    --color-secondary-dark-50: #F2EFFF;
+    --color-secondary-dark-100: #E1E0FF;
+    --color-secondary-dark-200: #C0C1FF;
+    --color-secondary-dark-300: #A0A3FF;
+    --color-secondary-dark-400: #8083FF;
+    --color-secondary-dark-500: #6366F1;
+    --color-secondary-dark-600: #494BD6;
+    --color-secondary-dark-700: #2F2EBE;
+    --color-secondary-dark-800: #1000A9;
+    --color-secondary-dark-900: #07006C;
+  
+    --color-tertiary-dark:#a855f7;
+    --color-tertiary-dark-50: #FAECFF;
+    --color-tertiary-dark-100: #F0DBFF;
+    --color-tertiary-dark-200: #DDB7FF;
+    --color-tertiary-dark-300: #CA93FF;
+    --color-tertiary-dark-400: #B76DFF;
+    --color-tertiary-dark-500: #9E4BED;
+    --color-tertiary-dark-600: #842BD2;
+    --color-tertiary-dark-700: #6900B3;
+    --color-tertiary-dark-800: #490080;
+    --color-tertiary-dark-900: #2C0051;
+    
+    --color-neutral-dark:#0f172a;
 }
 
-* {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
+
 body {
-    color: white;
+    color: #FFEED8;
 }
 
 
 .embla {
-    --slide-size: 30%;
-    --slide-spacing: 10px;
+    --slide-size: 100%;
+    --slide-spacing: 30px;
 }
+
+
+.lds-ellipsis,
+.lds-ellipsis div {
+  box-sizing: border-box;
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33.33333px;
+  width: 13.33333px;
+  height: 13.33333px;
+  border-radius: 50%;
+  background: currentColor;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
