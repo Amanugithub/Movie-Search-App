@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import SeriesCarousel from './SeriesCarousel'
 import MovieCarousel from './MovieCarousel';
 import { FaArrowRight } from "react-icons/fa6";
-const ACCESS_TOKEN =  import.meta.env.VITE_ACESS_TOKEN_AUTH;
+const ACCESS_TOKEN =  import.meta.env.VITE_ACCESS_TOKEN_AUTH;
 
 export default function Trending(){
     const [trending, setTrending] = useState(null);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
-const ACCESS_TOKEN =  import.meta.env.VITE_ACESS_TOKEN_AUTH;
+const ACCESS_TOKEN =  import.meta.env.VITE_ACCESS_TOKEN_AUTH;
 const imageURL = 'https://image.tmdb.org/t/p/w92'
 export default function SearchBar(){
     const [searchTerm, setSearchTerm] = useState('');
