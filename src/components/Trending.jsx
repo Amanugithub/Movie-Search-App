@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 
-import MovieCard from '../components/MovieCard'
+import SeriesCarousel from './SeriesCarousel'
 import MovieCarousel from './MovieCarousel';
 const ACCESS_TOKEN =  import.meta.env.VITE_ACESS_TOKEN_AUTH;
 
@@ -34,7 +34,10 @@ export default function Trending(){
     <section className="trending bg-neutral-dark pt-10" >
         {error ? <p>Error occured while loading...</p> : <p>Trending</p> }
         {loading ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> : 
-        <MovieCarousel trending={trending} />
+        <>
+            <MovieCarousel trending={trending} />
+            <SeriesCarousel trending={trending} />
+        </>
          }
     </section>
     )
