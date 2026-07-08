@@ -1,6 +1,7 @@
 import useEmblaCarousel from 'embla-carousel-react'
 import { IoIosArrowDropright } from "react-icons/io";
 import MovieCard from '../components/MovieCard'
+
     export default function MovieCarousel({trending}){
         const [emblaRef , emblaApi] = useEmblaCarousel();
         const scrollPrev = () => emblaApi?.scrollPrev()
@@ -8,7 +9,6 @@ import MovieCard from '../components/MovieCard'
 
         return (
             <div className="embla relative p-[5vw]" >
-            <div className=' inset-0 absolute bg-linear-to-r from-neutral-dark  via-transparent to-neutral-dark from-1% to-97% z-1 pointer-events-none'></div>
 
             <div className='trending-movies embla__viewport overflow-hidden z-0 ' ref={emblaRef}>
                  <div className="embla__container flex touch-pan-y touch-pinch-zoom ml-[calc(var(--slide-spacing) * -1)] ">
@@ -16,7 +16,7 @@ import MovieCard from '../components/MovieCard'
                 trending?.movies
                 .filter((movie)=> movie.vote_average !== 0)
                 .map((movie)=>(
-                    <MovieCard movieDetails={movie} key={movie.id} />
+                    <MovieCard movieDetails={movie} genres={trending.genres} key={movie.id} />
                 ))
                 }
                 </div>

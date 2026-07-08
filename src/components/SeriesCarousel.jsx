@@ -8,8 +8,6 @@ import SeriesCard from '../components/SeriesCard'
 
         return (
             <div className="embla relative p-[5vw]" >
-            <div className=' inset-0 absolute bg-linear-to-r from-neutral-dark  via-transparent to-neutral-dark from-1% to-97% z-1 pointer-events-none'></div>
-
             <div className='trending-series embla__viewport overflow-hidden z-0 ' ref={emblaRef}>
                  <div className="embla__container flex touch-pan-y touch-pinch-zoom ml-[calc(var(--slide-spacing) * -1)] ">
                 {
