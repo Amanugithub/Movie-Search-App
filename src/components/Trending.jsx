@@ -2,7 +2,17 @@ import { useEffect, useState } from 'react';
 import SeriesCarousel from './SeriesCarousel'
 import MovieCarousel from './MovieCarousel';
 import { FaArrowRight } from "react-icons/fa6";
+
+
 const ACCESS_TOKEN =  import.meta.env.VITE_ACCESS_TOKEN_AUTH;
+const options = {
+            method:'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization:`Bearer ${ACCESS_TOKEN}`
+            }
+        }
+
 
 export default function Trending(){
     const [trending, setTrending] = useState(null);
@@ -12,12 +22,13 @@ export default function Trending(){
     
        //fetch trending
     useEffect(()=>{
-        //fetch trending movies and series
+        //fetch trending movies , series and genres
         async function loadMovies() {
             try {
                 setLoading(true);
                 const data = await fetchTrending();
                 setTrending(data);
+  
                 
             } catch (error) {
                 setError(error);
@@ -29,6 +40,7 @@ export default function Trending(){
 
     },[])
 
+    
     return(
     <section className="trending bg-neutral-dark pt-10" >
         {error ? <p>Error occured while loading...</p> 
@@ -52,34 +64,20 @@ export default function Trending(){
 
 async function fetchTrending(){
 
-    const [responseForMovies , responseForSeries ] = await Promise.all(
+    const [responseForMovies , responseForSeries] = await Promise.all(
         [
-        fetch('https://api.themoviedb.org/3/trending/movie/day?language=en-US',{
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        }) , 
-        fetch('https://api.themoviedb.org/3/trending/tv/day?language=en-US',{
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        })
+        fetch('https://api.themoviedb.org/3/trending/movie/day?language=en-US',options) , 
+        fetch('https://api.themoviedb.org/3/trending/tv/day?language=en-US',options) ,
         ]
     )
     if (!responseForMovies.ok) {
         throw new Error("Failed to fetch Movies");
-    }
-    
-    if (!responseForSeries.ok) {
+    } else if (!responseForSeries.ok) {
         throw new Error("Failed to fetch TV shows.")
-    }
-    const [movieData ,seriesData ] = await Promise.all([
+    } 
+    const [movieData ,seriesData] = await Promise.all([
         responseForMovies.json(),
-        responseForSeries.json()
+        responseForSeries.json(),
     ])
     
     
