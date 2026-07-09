@@ -63,6 +63,15 @@
     --color-neutral-dark-800: #131B2E;
 
 }
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 10px currentColor;
+  }
+
+  .text-glow-lg {
+    text-shadow: 0 0 25px currentColor;
+  }
+}
 
 *,
 *::before,

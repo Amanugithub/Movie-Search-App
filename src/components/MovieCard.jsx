@@ -12,7 +12,7 @@ export default function MovieCard({movieDetails}){
         
         <div className="embla__slide grow-0 shrink-0 flex-[0 0 100%] min-w-0 pl-(--slide-spacing) w-[45%] lg:w-[20%] " 
             onClick={()=>
-            { navigate(`/movie/${movieDetails.id}` , {state: {movie:movieDetails}}) }}>
+            { navigate(`/details/${movieDetails.id}` , {state: {movie:movieDetails}}) }}>
 
             <div className=" bg-neutral-dark-700 border-2 border-neutral-dark-500 rounded-3xl border-dashed p-2">
                 <img src={`${IMG_BASE}${movieDetails.poster_path}`} alt="poster" className="

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
+import { useNavigate } from "react-router-dom";
+
 const ACCESS_TOKEN =  import.meta.env.VITE_ACCESS_TOKEN_AUTH;
 const imageURL = 'https://image.tmdb.org/t/p/w92'
 export default function SearchBar(){
@@ -7,6 +9,7 @@ export default function SearchBar(){
     const debouncedValue  = useDebounce(searchTerm, 500);
     const [results,setResults] = useState([]);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
     
     
     useEffect(()=>{
@@ -41,11 +44,11 @@ export default function SearchBar(){
                             scrollbar-none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden '>
                 {
                     results.filter((data)=> data.media_type !== "person").slice(0,10)
-                    .map((movie)=>(
-                        <div className='  ' key={movie.id} >
-                            <div className='flex p-0.5 items-center gap-5' >
-                                <img src={imageURL +  movie.poster_path} alt={movie.title || movie.name} className='w-10  rounded-xl' />
-                                <p>{movie.title || movie.name}</p>
+                    .map((media)=>(
+                        <div className='searchResultCard' key={media.id} >
+                            <div className='flex p-0.5 items-center gap-5 ' onClick={()=>{ navigate(`/details/${media.id}` , {state: {movie:media}}) }} >
+                                <img src={imageURL +  media.poster_path} alt={media.title || media.name} className='w-10  rounded-xl' />
+                                <p>{media.title || media.name}</p>
                             </div>
                             <hr  className='border-neutral-950' />
                         </div>
