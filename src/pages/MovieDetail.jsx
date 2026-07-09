@@ -5,18 +5,24 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import { IoAdd } from "react-icons/io5";
 import { FaPlay } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import SeriesCarousel from "../components/SeriesCarousel";
+import MovieCarousel from "../components/MovieCarousel";
 
 const movieDetailsURL = 'https://api.themoviedb.org/3/movie/';
 const seriesDetailsURL = 'https://api.themoviedb.org/3/tv/';
 const imageURL = "https://image.tmdb.org/t/p/w1280";
 const ACCESS_TOKEN =  import.meta.env.VITE_ACCESS_TOKEN_AUTH;
-
+const option = {headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${ACCESS_TOKEN}`
+                }}
 export default function MovieDetail(){
     const { id } = useParams();
     const location = useLocation();
     const tempState = location.state.movie;
-
+    const mediaType = tempState.media_type;
     const [details,setDetails] = useState({});
+    const [similar, setSimilar] = useState();
     const [loading , setLoading] = useState(true);
     const [error,setError] = useState(null);
 
@@ -24,8 +30,9 @@ export default function MovieDetail(){
         async function loadDetails(){
             try {
                 setLoading(true);
-                const data = await fetchdetails(id , tempState);
-                setDetails(data);
+                const {resultDetails , resultSimilar} = await fetchdetails(id , tempState);
+                setDetails(resultDetails);
+                setSimilar(resultSimilar)
             } catch (error) {
                 setError(error);
             } finally {
@@ -52,15 +59,35 @@ export default function MovieDetail(){
             { loading ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> : 
             <div className=" details absolute top-[60%] left-[10%] z-30 p-10 w-3/4 ">
 
-                <div className="pills flex flex-wrap justify-between text-md font-bold text-secondary-dark-100 font-manrope max-w-[50%] ">
-                    <div className="border border-secondary-dark-200/60 rounded-full min-w-20 text-center p-1 bg-neutral-dark-700/50 backdrop-blur-sm ">{details.release_date || details.first_air_date.slice(0,4) + " - " + details.last_air_date.slice(0,4) }</div>
-                    <div className="border flex gap-2 items-center justify-center border-secondary-dark-200/60 rounded-full min-w-20 text-center font-bold p-1 bg-neutral-dark-700/50 backdrop-blur-sm ">
-                        <FaStar className="text-primary-dark-100"/>
+                <div className="pills flex flex-wrap items-center justify-center gap-5 text-md font-bold text-secondary-dark-100 font-manrope max-w-[60%] ">
+
+                    <div className="border flex items-center justify-center border-secondary-dark-200/60 rounded-full min-w-20 text-center p-2 bg-neutral-dark-700/50 backdrop-blur-sm">
+                        {details.release_date || details.first_air_date.slice(0, 4) + " - " + details.last_air_date.slice(0, 4)}
+                    </div>
+
+                    <div className="border flex gap-2 items-center justify-center border-secondary-dark-200/60 rounded-full min-w-20 text-center font-bold p-2 bg-neutral-dark-700/50 backdrop-blur-sm">
+                        <FaStar className="text-primary-dark-100" />
                         <div>{details.vote_average.toFixed(1)}</div>
                     </div>
-                    <div className="border border-secondary-dark-200/60 rounded-full min-w-20 text-center p-1 bg-neutral-dark-700/50 backdrop-blur-sm">duration</div>
-                    <div className="border flex border-secondary-dark-200/60 rounded-full min-w-20 text-center p-1 bg-neutral-dark-700/50 backdrop-blur-sm ">{details.genres.map((genre, index) => ( <div key={genre.id}>{index > 0 && <span className="mx-1">•</span>}{genre.name}</div>))}</div>
-                </div>
+
+                    <div className="border flex items-center justify-center border-secondary-dark-200/60 rounded-full min-w-20 text-center p-2 bg-neutral-dark-700/50 backdrop-blur-sm">
+                        {details.runtime != null
+                        ? formatRuntime(details.runtime)
+                        : details.seasons[0].season_number == 0
+                            ? details.seasons.length - 1 + " Seasons"
+                            : details.seasons.length + " Seasons"}
+                    </div>
+
+                    <div className="border flex flex-wrap items-center justify-center gap-x-1 border-secondary-dark-200/60 rounded-full min-w-20 text-center p-2 bg-neutral-dark-700/50 backdrop-blur-sm">
+                        {details.genres.map((genre, index) => (
+                        <div key={genre.id} className="flex items-center">
+                            {index > 0 && <span className="mx-1">•</span>}
+                            {genre.name}
+                        </div>
+                        ))}
+                    </div>
+
+</div>
                 <h2 className=" font-instrument text-6xl text-glow-lg my-7 italic font-semibold " >{details.title || details.name}</h2>
                 <p className=" w-2/3 " >{details.overview}</p>
                 <div className="action-buttons flex gap-4 font-monrope font-bold mt-10">
@@ -76,9 +103,12 @@ export default function MovieDetail(){
                     <button className="border border-neutral-dark-700 rounded-2xl p-5 text-2xl bg-neutral-dark-800 " ><IoShareSocialOutline /></button>
                 </div>
             </div>}
-            
-            { error && <div>Error loading details</div> }
-            
+
+            <div></div>
+            { error && <div>Error loading data</div> }
+            <>
+                { mediaType == 'tv' ? <SeriesCarousel /> : <MovieCarousel /> }
+            </>
         </div>
 
 
@@ -94,12 +124,26 @@ async function fetchdetails(id , movie){
         URL = `${seriesDetailsURL}${id}`
     }
 
-    const response = await fetch(URL , {
-        headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${ACCESS_TOKEN}`
-        }
-    });
-    const result = await response.json();
-    return result
+    const [responseDetails , responseSimilar] = await Promise.all([
+        fetch(URL , option),
+        fetch(`${URL}/similar` ,option)
+    ]) 
+    if (!responseDetails.ok){
+        throw new Error("Error fetching details")
+    } else if (!responseSimilar.ok){
+    throw new Error("Error fetching similar media")
+    }
+    const [resultDetails , resultSimilar] = await Promise.all([
+        responseDetails.json() , 
+        responseSimilar.json()
+    ])
+
+    return {resultDetails , resultSimilar}
+}
+
+function formatRuntime(mins){
+    if (mins == 0 ) return "N/A"
+    const h = Math.trunc(mins/60);
+    const m = mins % 60;
+    return `${h}h ${m.toString().padStart(2, '0')}m`;
 }

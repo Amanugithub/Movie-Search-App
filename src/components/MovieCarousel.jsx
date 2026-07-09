@@ -16,7 +16,7 @@ import MovieCard from '../components/MovieCard'
                 trending?.movies
                 .filter((movie)=> movie.vote_average !== 0)
                 .map((movie)=>(
-                    <MovieCard movieDetails={movie} genres={trending.genres} key={movie.id} />
+                    <MovieCard movieDetails={movie} key={movie.id} />
                 ))
                 }
                 </div>
