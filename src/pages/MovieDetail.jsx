@@ -5,8 +5,7 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import { IoAdd } from "react-icons/io5";
 import { FaPlay } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import SeriesCarousel from "../components/SeriesCarousel";
-import MovieCarousel from "../components/MovieCarousel";
+import MovieCarousel from "../components/Carousel";
 
 const movieDetailsURL = 'https://api.themoviedb.org/3/movie/';
 const seriesDetailsURL = 'https://api.themoviedb.org/3/tv/';
@@ -20,19 +19,19 @@ export default function MovieDetail(){
     const { id } = useParams();
     const location = useLocation();
     const tempState = location.state.movie;
-    const mediaType = tempState.media_type;
     const [details,setDetails] = useState({});
-    const [similar, setSimilar] = useState();
+    const [similar, setSimilar] = useState([]);
     const [loading , setLoading] = useState(true);
     const [error,setError] = useState(null);
-
+    console.log(details);
+    
     useEffect(()=>{
         async function loadDetails(){
             try {
                 setLoading(true);
                 const {resultDetails , resultSimilar} = await fetchdetails(id , tempState);
                 setDetails(resultDetails);
-                setSimilar(resultSimilar)
+                setSimilar(resultSimilar.results);
             } catch (error) {
                 setError(error);
             } finally {
@@ -42,7 +41,7 @@ export default function MovieDetail(){
         loadDetails();
     },[id , tempState]);
 
-    console.log(details);
+    
     
 
     return (
@@ -56,13 +55,13 @@ export default function MovieDetail(){
             </div>
 
 
-            { loading ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> : 
-            <div className=" details absolute top-[60%] left-[10%] z-30 p-10 w-3/4 ">
+            { loading ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> 
+            : <div className=" details absolute top-[60%] left-[10%] z-30 p-10 w-3/4 ">
 
                 <div className="pills flex flex-wrap items-center justify-center gap-5 text-md font-bold text-secondary-dark-100 font-manrope max-w-[60%] ">
 
                     <div className="border flex items-center justify-center border-secondary-dark-200/60 rounded-full min-w-20 text-center p-2 bg-neutral-dark-700/50 backdrop-blur-sm">
-                        {details.release_date || details.first_air_date.slice(0, 4) + " - " + details.last_air_date.slice(0, 4)}
+                        {details.release_date || formatDuration(details.first_air_date , details.last_air_date) } 
                     </div>
 
                     <div className="border flex gap-2 items-center justify-center border-secondary-dark-200/60 rounded-full min-w-20 text-center font-bold p-2 bg-neutral-dark-700/50 backdrop-blur-sm">
@@ -87,7 +86,7 @@ export default function MovieDetail(){
                         ))}
                     </div>
 
-</div>
+                </div>
                 <h2 className=" font-instrument text-6xl text-glow-lg my-7 italic font-semibold " >{details.title || details.name}</h2>
                 <p className=" w-2/3 " >{details.overview}</p>
                 <div className="action-buttons flex gap-4 font-monrope font-bold mt-10">
@@ -104,11 +103,8 @@ export default function MovieDetail(){
                 </div>
             </div>}
 
-            <div></div>
             { error && <div>Error loading data</div> }
-            <>
-                { mediaType == 'tv' ? <SeriesCarousel /> : <MovieCarousel /> }
-            </>
+            <MovieCarousel media={similar} />
         </div>
 
 
@@ -137,7 +133,7 @@ async function fetchdetails(id , movie){
         responseDetails.json() , 
         responseSimilar.json()
     ])
-
+    
     return {resultDetails , resultSimilar}
 }
 
@@ -146,4 +142,10 @@ function formatRuntime(mins){
     const h = Math.trunc(mins/60);
     const m = mins % 60;
     return `${h}h ${m.toString().padStart(2, '0')}m`;
+}
+
+function formatDuration(start , end){
+    const start_year = start.slice(0,4);
+    const end_year = end ? end.slice(0,4) : "Ongoing";
+    return `${start_year} - ${end_year}`;
 }

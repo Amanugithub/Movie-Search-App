@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import SeriesCarousel from './SeriesCarousel'
-import MovieCarousel from './MovieCarousel';
+import Carousel from './Carousel';
 import { FaArrowRight } from "react-icons/fa6";
 
 
@@ -53,8 +52,9 @@ export default function Trending(){
         </div> }
         {loading ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> : 
         <>
-            <MovieCarousel trending={trending} />
-            <SeriesCarousel trending={trending} />
+            <Carousel media={trending.movies} />
+            <Carousel media={trending.series} />
+            
         </>
          }
     </section>
