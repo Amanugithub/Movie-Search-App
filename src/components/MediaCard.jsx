@@ -25,11 +25,13 @@ export default function MovieCard({details}){
             <div className="info font-manrope text-secondary-dark-100 font-bold" >
                 <p>{details.title || details.name}</p>
 
-                { details.media_type == 'movie' ? <div className="flex items-center justify-between">
-                    <div className="flex items-center text-sm gap-1">
+                { details.media_type == 'movie' 
+                ? <div className="flex items-center justify-between  ">
+                    <div className="sm:flex items-center text-sm gap-1">
                         <p className=" ">{details.release_date.slice(0,4)} •</p>
                         <p>{filteredGenres[0]?.name}</p>
                     </div>
+                    
                     <div className="rating flex items-center text-primary-dark-100">
                         <FaStar />
                         <p className="pl-2" >{details.vote_average.toFixed(1)}</p>
