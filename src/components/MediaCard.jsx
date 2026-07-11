@@ -9,13 +9,13 @@ export default function MovieCard({details}){
     const genres = useContext(GenreContext).genres;
     const filteredGenres = genres.filter((genre)=>{ return details.genre_ids.includes(genre.id) });
     const navigate = useNavigate();
-    console.log(filteredGenres);
+    console.log(details);
     
     return (
         
         <div className="embla__slide grow-0 shrink-0 flex-[0 0 100%] min-w-0 pl-(--slide-spacing) w-[45%] lg:w-[20%] " 
             onClick={()=>
-            { navigate(`/details/${details.id}` , {state: {movie:details}}) }}>
+            { navigate(`/details/${details.media_type}/${details.id}`) }}>
 
             <div className=" bg-neutral-dark-700 border-2 border-neutral-dark-500 rounded-3xl border-dashed p-2">
                 <img src={`${IMG_BASE}${details.poster_path}`} alt="poster" className="

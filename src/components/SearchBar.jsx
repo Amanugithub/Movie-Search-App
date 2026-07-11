@@ -46,7 +46,7 @@ export default function SearchBar(){
                     results.filter((data)=> data.media_type !== "person").slice(0,10)
                     .map((media)=>(
                         <div className='searchResultCard' key={media.id} >
-                            <div className='flex p-0.5 items-center gap-5 ' onClick={()=>{ navigate(`/details/${media.id}` , {state: {movie:media}}) }} >
+                            <div className='flex p-0.5 items-center gap-5 ' onClick={()=>{ navigate(`/details/${media.media_type}/${media.id}` , {state: {movie:media}}) }} >
                                 <img src={imageURL +  media.poster_path} alt={media.title || media.name} className='w-10  rounded-xl' />
                                 <p>{media.title || media.name}</p>
                             </div>

@@ -17,29 +17,33 @@ const option = {headers: {
                 }}
 export default function MovieDetail(){
     const { id } = useParams();
+    const mediaType = useParams().media_type;
     const location = useLocation();
-    const tempState = location.state.movie;
+    
     const [details,setDetails] = useState({});
     const [similar, setSimilar] = useState([]);
     const [loading , setLoading] = useState(true);
     const [error,setError] = useState(null);
-    console.log(details);
+
     
     useEffect(()=>{
         async function loadDetails(){
             try {
                 setLoading(true);
-                const {resultDetails , resultSimilar} = await fetchdetails(id , tempState);
+                const {resultDetails , resultSimilar} = await fetchdetails(id , mediaType);
                 setDetails(resultDetails);
-                setSimilar(resultSimilar.results);
+                const Similar = resultSimilar.results.map((obj => ({...obj , media_type:mediaType})))
+                setSimilar(Similar);
             } catch (error) {
                 setError(error);
             } finally {
                 setLoading(false);
             }
         };
+        console.log('running effect');
+        
         loadDetails();
-    },[id , tempState]);
+    },[id , mediaType,location]);
 
     
     
@@ -104,7 +108,7 @@ export default function MovieDetail(){
             </div>}
 
             { error && <div>Error loading data</div> }
-            <MovieCarousel media={similar} />
+            <MovieCarousel media={similar}  />
         </div>
 
 
@@ -112,11 +116,11 @@ export default function MovieDetail(){
 }
 
 
-async function fetchdetails(id , movie){
+async function fetchdetails(id , mediaType){
     let URL = '';
-    if (movie.media_type == "movie") {
+    if (mediaType == "movie") {
         URL = `${movieDetailsURL}${id}`
-    } else if (movie.media_type == "tv"){
+    } else if (mediaType == "tv"){
         URL = `${seriesDetailsURL}${id}`
     }
 
@@ -133,9 +137,9 @@ async function fetchdetails(id , movie){
         responseDetails.json() , 
         responseSimilar.json()
     ])
-    
     return {resultDetails , resultSimilar}
 }
+
 
 function formatRuntime(mins){
     if (mins == 0 ) return "N/A"
@@ -148,4 +152,13 @@ function formatDuration(start , end){
     const start_year = start.slice(0,4);
     const end_year = end ? end.slice(0,4) : "Ongoing";
     return `${start_year} - ${end_year}`;
+}
+
+function formatLocation(str){
+    let temp = '';
+    for(let i = 0 ; i < str.length ; i++){
+        if(str[i] == '/') return;
+        temp += str[i];
+    }
+    return temp;
 }
