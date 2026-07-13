@@ -11,7 +11,6 @@ export default function NavBar(){
             <Link to='/' >Home</Link>
             <Link to='/watchlist'>Watchlist</Link>
             <Link to='/AI' >AI</Link>
-            <Link to='/quiz' >Quiz</Link>
             <Link to='/about' >About</Link>
             
         </nav>

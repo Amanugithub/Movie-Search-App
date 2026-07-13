@@ -43,8 +43,8 @@ export default function Trending(){
     return(
     <section className="trending bg-neutral-dark pt-10" >
         {error ? <p>Error occured while loading...</p> 
-        : <div className='flex items-center justify-between px-15'>
-            <p className='font-instrument text-4xl' >Trending Now</p> 
+        : <div className='flex items-center justify-between  px-5 lg:px-15'>
+            <p className='font-instrument text-3xl md:text-4xl' >Trending Now</p> 
             <span className='flex gap-2 items-center'>
                 <p className='font-monrope text-sm font-black'>VIEW ALL</p> 
                 <FaArrowRight />

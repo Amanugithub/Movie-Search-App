@@ -54,14 +54,14 @@ export default function MovieDetail(){
             
             : <div className="">
                 <div className="backdrop relative  overflow-hidden">
-                <img src={`${imageURL}${details.backdrop_path}`}
-                    className="poster absolute left-[7%] top-[13%] w-[70%] h-[76%] object-cover z-0 "/>
-                <img src={tv} className=" relative block w-full z-10 max-w-full " />
-                <div inert className=' inset-0 absolute bg-linear-to-t from-neutral-dark from-10% to-75% z-20 to-transparent '></div>
+                    <img src={`${imageURL}${details.backdrop_path}`}
+                        className="poster absolute left-[7%] top-[13%] w-[70%] h-[76%] object-cover z-0 "/>
+                    <img src={tv} className=" relative block w-full z-10 max-w-full " />
+                    <div inert className=' inset-0 absolute bg-linear-to-t from-neutral-dark from-10% to-75% z-20 to-transparent '></div>
                 
                 </div>
 
-                <div className=" details absolute top-[25%] sm:top-[60%]  left-[2.5%] sm:left-[10%] p-4 sm:p-10 w-[95%] sm:w-3/4 z-20 ">
+                <div className="details absolute top-[25%] md:top-[40%] lg:top-[60%] left-[2.5%] sm:left-[10%] md:left-[8%] p-4 sm:p-10 md:p-6 w-[95%] sm:w-3/4 md:w-4/5 z-20">
 
                     <div className="pills flex flex-wrap items-center gap-5 text-md font-bold text-secondary-dark-100 font-manrope sm:max-w-[60%] ">
 
