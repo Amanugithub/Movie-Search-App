@@ -40,7 +40,6 @@ export default function MovieDetail(){
                 setLoading(false);
             }
         };
-        console.log('running effect');
         
         loadDetails();
     },[id , mediaType,location]);
@@ -66,7 +65,7 @@ export default function MovieDetail(){
                     <div className="pills flex flex-wrap items-center gap-5 text-md font-bold text-secondary-dark-100 font-manrope sm:max-w-[60%] ">
 
                         <div className="border flex items-center justify-center border-secondary-dark-200/60 rounded-full min-w-20 text-center p-2 bg-neutral-dark-700/50 backdrop-blur-sm">
-                            {details.release_date.slice(0,4) || formatDuration(details.first_air_date , details.last_air_date) } 
+                            {details.release_date?.slice(0,4) || formatDuration(details.first_air_date , details.last_air_date) } 
                         </div>
 
                         <div className="border flex gap-2 items-center justify-center border-secondary-dark-200/60 rounded-full text-center font-bold p-2 bg-neutral-dark-700/50 backdrop-blur-sm">
