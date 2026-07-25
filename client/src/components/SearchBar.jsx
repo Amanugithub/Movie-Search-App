@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useNavigate } from "react-router-dom";
-const backendURL = 'http://localhost:3001'
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 const imageURL = 'https://image.tmdb.org/t/p/w92'
+
 export default function SearchBar(){
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedValue  = useDebounce(searchTerm, 500);

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Carousel from './Carousel';
 import { FaArrowRight } from "react-icons/fa6";
 
-const backendURL = 'http://localhost:3001';
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 export default function Trending(){
     const [trending, setTrending] = useState(null);

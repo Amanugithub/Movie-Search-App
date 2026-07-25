@@ -7,7 +7,7 @@ import { FaPlay } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import MovieCarousel from "../components/Carousel";
 
-const backendURL = 'http://localhost:3001'
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 const imageURL = "https://image.tmdb.org/t/p/w1280";
 export default function MovieDetail(){
     const { id } = useParams();
