@@ -9,7 +9,6 @@ export default function MovieCard({details}){
     const genres = useContext(GenreContext).genres;
     const filteredGenres = genres.filter((genre)=>{ return details.genre_ids.includes(genre.id) });
     const navigate = useNavigate();
-    console.log(details);
     
     return (
         

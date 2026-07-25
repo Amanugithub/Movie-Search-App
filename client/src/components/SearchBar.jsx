@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useNavigate } from "react-router-dom";
-
-const ACCESS_TOKEN =  import.meta.env.VITE_ACCESS_TOKEN_AUTH;
+const backendURL = 'http://localhost:3001'
 const imageURL = 'https://image.tmdb.org/t/p/w92'
 export default function SearchBar(){
     const [searchTerm, setSearchTerm] = useState('');
@@ -19,7 +18,7 @@ export default function SearchBar(){
                 return;
                 }
             try {
-                const data = await fetchData(debouncedValue);
+                const data = await search(debouncedValue);
                 setResults(data);
             } catch (error) {
                 setError(error);
@@ -62,31 +61,15 @@ export default function SearchBar(){
 }
 
 
-    async function fetchData(searchTerm){
-    const URL = 'https://api.themoviedb.org/3/search/multi'
-    const params = {
-        query: searchTerm,
-        language:'en-US',
-        page: 1,
-        include_adult:false
-        }
-    const queryString = new URLSearchParams(params).toString();
-    const options = {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${ACCESS_TOKEN}`
-        }
-    }
-    const response = await fetch(`${URL}?${queryString}`,options)
-    if(!response.ok)
-        throw new Error("Error fetching data");
-    const data = await response.json();
-    console.log(data.results);
-    
-    return data.results;
+async function search(searchTerm) {
+    const response = await fetch(
+        `${backendURL}/api/search?searchTerm=${encodeURIComponent(searchTerm)}`
+    );
+
+    if (!response.ok) {
+        throw new Error("Search failed");
     }
 
-
-
+    return await response.json();
+}
 
