@@ -2,16 +2,7 @@ import { useEffect, useState } from 'react';
 import Carousel from './Carousel';
 import { FaArrowRight } from "react-icons/fa6";
 
-
-const ACCESS_TOKEN =  import.meta.env.VITE_ACCESS_TOKEN_AUTH;
-const options = {
-            method:'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization:`Bearer ${ACCESS_TOKEN}`
-            }
-        }
-
+const backendURL = 'http://localhost:3001';
 
 export default function Trending(){
     const [trending, setTrending] = useState(null);
@@ -19,13 +10,12 @@ export default function Trending(){
     const [error, setError] = useState(null);
 
     
-       //fetch trending
     useEffect(()=>{
-        //fetch trending movies , series and genres
         async function loadMovies() {
             try {
                 setLoading(true);
-                const data = await fetchTrending();
+                const response = await fetch(`${backendURL}/api/trending`);
+                const data = await response.json();
                 setTrending(data);
   
                 
@@ -61,26 +51,3 @@ export default function Trending(){
     )
 }
 
-
-async function fetchTrending(){
-
-    const [responseForMovies , responseForSeries] = await Promise.all(
-        [
-        fetch('https://api.themoviedb.org/3/trending/movie/day?language=en-US',options) , 
-        fetch('https://api.themoviedb.org/3/trending/tv/day?language=en-US',options) ,
-        ]
-    )
-    if (!responseForMovies.ok) {
-        throw new Error("Failed to fetch Movies");
-    } else if (!responseForSeries.ok) {
-        throw new Error("Failed to fetch TV shows.")
-    } 
-    const [movieData ,seriesData] = await Promise.all([
-        responseForMovies.json(),
-        responseForSeries.json(),
-    ])
-    
-    
-    return {movies: movieData.results , series:seriesData.results}
-
-}

@@ -7,14 +7,8 @@ import { FaPlay } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import MovieCarousel from "../components/Carousel";
 
-const movieDetailsURL = 'https://api.themoviedb.org/3/movie/';
-const seriesDetailsURL = 'https://api.themoviedb.org/3/tv/';
+const backendURL = 'http://localhost:3001'
 const imageURL = "https://image.tmdb.org/t/p/w1280";
-const ACCESS_TOKEN =  import.meta.env.VITE_ACCESS_TOKEN_AUTH;
-const option = {headers: {
-                    accept: 'application/json',
-                    Authorization: `Bearer ${ACCESS_TOKEN}`
-                }}
 export default function MovieDetail(){
     const { id } = useParams();
     const mediaType = useParams().media_type;
@@ -30,7 +24,7 @@ export default function MovieDetail(){
         async function loadDetails(){
             try {
                 setLoading(true);
-                const {resultDetails , resultSimilar} = await fetchdetails(id , mediaType);
+                const {resultDetails , resultSimilar} = await fetchDetails(id , mediaType);
                 setDetails(resultDetails);
                 const Similar = resultSimilar.results.map((obj => ({...obj , media_type:mediaType})))
                 setSimilar(Similar);
@@ -126,28 +120,12 @@ export default function MovieDetail(){
 }
 
 
-async function fetchdetails(id , mediaType){
-    let URL = '';
-    if (mediaType == "movie") {
-        URL = `${movieDetailsURL}${id}`
-    } else if (mediaType == "tv"){
-        URL = `${seriesDetailsURL}${id}`
+async function fetchDetails(id , mediaType){
+    const response = await fetch(`${backendURL}/api/mediaDetails?id=${id}&mediaType=${encodeURIComponent(mediaType)}`);
+    if (!response.ok){
+        throw new Error("error fetching details.")
     }
-
-    const [responseDetails , responseSimilar] = await Promise.all([
-        fetch(URL , option),
-        fetch(`${URL}/similar` ,option)
-    ]) 
-    if (!responseDetails.ok){
-        throw new Error("Error fetching details")
-    } else if (!responseSimilar.ok){
-    throw new Error("Error fetching similar media")
-    }
-    const [resultDetails , resultSimilar] = await Promise.all([
-        responseDetails.json() , 
-        responseSimilar.json()
-    ])
-    return {resultDetails , resultSimilar}
+    return response.json();
 }
 
 
